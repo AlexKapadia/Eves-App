@@ -1,123 +1,143 @@
-# OutdoorWomen United
+# Eve's App - Girls Hike United
 
-A beautiful, modern web platform dedicated to empowering women through outdoor activities, hiking adventures, and community connections.
+A community platform for women who love hiking and outdoor adventures, built with React + Vite and Supabase.
 
-![OutdoorWomen United](https://images.unsplash.com/photo-1551632811-561732d1e306?q=80&w=1470&auto=format&fit=crop)
+## 🏔️ Project Overview
 
-## Features
+Eve's App is a platform built to empower women through hiking and outdoor activities. The app features community posts, events, and resources for hikers of all experience levels.
 
-- **Responsive Design**: Beautiful, mobile-friendly UI built with React and Tailwind CSS
-- **Community Platform**: Share and interact with posts from fellow outdoor enthusiasts
-- **Events Calendar**: Discover and filter hiking events by location and difficulty
-- **Modern UI Components**: Using Shadcn UI components for a consistent design system
-- **User Authentication**: Full user registration, login, and profile management
-- **MongoDB Database**: Store user profiles, events, posts, and interactions
-- **RESTful API**: Backend implemented with Express and TypeScript
+## 🛠️ Tech Stack
 
-## Tech Stack
+- **Frontend**: React 18, TypeScript, Vite
+- **UI**: TailwindCSS + Shadcn UI components
+- **Backend**: Supabase (PostgreSQL database, Authentication, Storage)
+- **State Management**: React Context
+- **Animations**: Framer Motion
 
-### Frontend
-- **Framework**: React, TypeScript, Tailwind CSS
-- **UI Components**: Shadcn UI
-- **Routing**: React Router
-- **Icons**: Lucide React
-- **Build Tool**: Vite
-- **Package Manager**: npm/bun
+## ✨ Features
 
-### Backend
-- **Framework**: Express, TypeScript
-- **Database**: MongoDB with Mongoose
-- **Authentication**: JWT
-- **File Storage**: Local file system (with options for cloud storage)
-- **API Documentation**: Comprehensive API endpoints
+- **User Authentication**: Sign up, sign in, and account management
+- **Community Posts**: Create, like, and comment on posts
+- **User Profiles**: Personalized profiles with hiking preferences
+- **Events**: Discover and join upcoming hikes and outdoor events
+- **Responsive Design**: Works seamlessly on mobile, tablet, and desktop
 
-## Project Structure
+## 🔒 Authentication Architecture
+
+The app uses Supabase Authentication with a custom auth context:
+
+- **AuthProvider**: Context provider that handles user state and auth operations
+- **Session Management**: Automatic token refresh and session persistence
+- **Profile Integration**: Automatic user profile creation on signup
+
+## 🗄️ Database Schema
 
 ```
-outdoorwomen-united/
-├── backend/             # Express backend API
-│   ├── src/
-│   │   ├── config/      # Configuration files
-│   │   ├── controllers/ # API controllers
-│   │   ├── middleware/  # Express middleware
-│   │   ├── models/      # Mongoose models
-│   │   ├── routes/      # API routes
-│   │   ├── utils/       # Utility functions
-│   │   └── index.ts     # Application entry point
-├── public/              # Static frontend files
-├── src/                 # Frontend React application
-│   ├── components/      # Reusable UI components
-│   ├── hooks/           # Custom React hooks
-│   ├── lib/             # Utility functions and constants
-│   ├── pages/           # Page components
-│   ├── App.tsx          # Main application component with routing
-│   ├── index.css        # Global styles
-│   └── main.tsx         # Entry point
-├── package.json         # Dependencies and scripts
-├── tailwind.config.ts   # Tailwind configuration
-└── vite.config.ts       # Vite configuration
+profiles
+  - id (uuid, PK, FK to auth.users)
+  - name (text)
+  - email (text)
+  - profile_image (text, nullable)
+  - bio (text, nullable)
+  - location (text, nullable)
+  - experience_level (text, nullable)
+  - joined_date (timestamp)
+
+posts
+  - id (uuid, PK)
+  - user_id (uuid, FK to profiles)
+  - title (text, nullable)
+  - content (text)
+  - image_url (text, nullable)
+  - created_at (timestamp)
+  - updated_at (timestamp)
+
+post_likes
+  - user_id (uuid, FK to profiles)
+  - post_id (uuid, FK to posts)
+  - created_at (timestamp)
+  
+post_comments
+  - id (uuid, PK)
+  - post_id (uuid, FK to posts)
+  - user_id (uuid, FK to profiles)
+  - content (text)
+  - created_at (timestamp)
+  - updated_at (timestamp)
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or newer recommended)
-- npm or bun
-- MongoDB (local installation or MongoDB Atlas)
+- Node.js (v18+)
+- npm or yarn
+- A Supabase account and project
 
-### Frontend Installation
+### Installation
 
-1. Install dependencies
-   ```bash
-   npm install
-   # or if you're using bun
-   bun install
+1. Clone the repository
    ```
-
-2. Start the development server
-   ```bash
-   npm run dev
-   # or
-   bun run dev
-   ```
-
-3. Open your browser and navigate to http://localhost:8080
-
-### Backend Installation
-
-1. Navigate to the backend directory
-   ```bash
-   cd backend
+   git clone https://github.com/AlexKapadia/Eves-App.git
+   cd Eves-App
    ```
 
 2. Install dependencies
-   ```bash
+   ```
    npm install
    ```
 
-3. Set up environment variables by creating a `.env` file
+3. Create a `.env` file in the root directory with your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-4. Start the backend server
-   ```bash
+4. Start the development server
+   ```
    npm run dev
    ```
 
-For detailed backend setup instructions, see the [backend README](./backend/README.md).
+5. Open [http://localhost:8080](http://localhost:8080) to view the app in your browser
 
-## Development Notes
+## 📁 Project Structure
 
-- The front and backend can be run simultaneously to create a full-stack development environment
-- Backend API runs on port 5000 by default
-- Frontend development server runs on port 8080 by default
-- Look at the API documentation in the backend README for available endpoints
+```
+src/
+├── components/       # UI components
+│   ├── community/    # Community-related components
+│   ├── ui/           # Shadcn UI components
+│   └── auth/         # Authentication components
+├── lib/              # Core libraries and utilities
+│   ├── auth-context.tsx   # Authentication provider
+│   ├── supabase.ts        # Supabase client
+│   └── community-service.ts # Community features logic
+├── pages/            # Application pages
+├── hooks/            # Custom React hooks
+└── main.tsx          # Application entry point
+```
 
-## License
+## 🔧 Development
+
+### Running Tests
+
+```
+npm test
+```
+
+### Building for Production
+
+```
+npm run build
+```
+
+## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
-- Images from [Unsplash](https://unsplash.com)
-- UI components from [Shadcn UI](https://ui.shadcn.com/)
-- Icons from [Lucide](https://lucide.dev/)
+- [Supabase](https://supabase.io/) for the backend infrastructure
+- [Shadcn UI](https://ui.shadcn.com/) for the component library
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Vite](https://vitejs.dev/) for the build tool
